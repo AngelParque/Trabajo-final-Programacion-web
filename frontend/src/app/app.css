@@ -1,0 +1,49 @@
+:host { display: block; }
+.sidebar { width: 244px; z-index: 2; }
+.main-content { margin-left: 244px; max-width: 1650px; }
+.sidebar .nav-link { color: #68798b; border-radius: .5rem; padding: .65rem .75rem; margin: .1rem 0; }
+.sidebar .nav-link.active { color: #183d65; background: #edf3f9; }
+.sidebar .nav-link:hover { background: #f3f6f9; }
+.sidebar .nav-link span { margin-left: .75rem; font-weight: 600; }
+.brand-icon { width: 39px; height: 39px; background: #173b64; font-size: 1.35rem; }
+.brand strong { display: block; color: #21344b; font: 700 .875rem Manrope, sans-serif; }
+.brand small { display: block; margin-top: .2rem; color: #8491a1; font-size: .7rem; }
+.eyebrow { letter-spacing: .09em; }
+h1 { color: #25384d; font-family: Manrope, sans-serif; }
+.card h3 { color: #293c50; font-size: 1.1rem; }
+.search { width: 11.5rem; }
+.welcome-banner { min-height: 210px; background: linear-gradient(110deg, #173959, #1d5270); }
+.welcome-banner .eyebrow { color: #b5d0e1 !important; }
+.welcome-banner h2 { font: 700 clamp(1.4rem, 2vw, 1.8rem)/1.23 Manrope, sans-serif; margin: .6rem 0; }
+.welcome-banner p { max-width: 460px; color: #d3e2eb; margin: 0; }
+.hero-watermark { right: 6rem; top: -4.7rem; font-size: 16rem; opacity: .06; }
+.stat-icon { width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border-radius: .65rem; flex: 0 0 auto; }
+.stats .card { min-height: 5.5rem; padding: 1rem; }
+.stats small { display: block; color: #8390a0; }
+.stats strong { font: 700 1.3rem Manrope, sans-serif; }
+.quick-link { color: #48637c; padding: .7rem; }
+.quick-icon { width: 2rem; height: 2rem; display: grid; place-items: center; flex: 0 0 auto; }
+.quick-link div { flex: 1; }
+.quick-link b, .quick-link small { display: block; }
+.quick-link small { color: #8996a4; }
+.two > label { width: 50%; }
+.form-panel > p, .d-flex.justify-content-between > div > p { color: #8491a0; margin: .25rem 0 0; font-size: .85rem; }
+.form-panel form { margin-top: 1rem; }
+.form-panel label { color: #56697c; }
+.form-panel .form-control, .form-panel .form-select { margin-top: .25rem; }
+.activity-symbol { width: 2.2rem; height: 2.2rem; flex: 0 0 auto; }
+.activity-info b { display: block; color: #415569; }
+.activity-info small { color: #929eaa; }
+.toast-message { position: fixed; top: 1rem; right: 1rem; z-index: 1080; }
+@media (max-width: 767.98px) {
+  .sidebar { width: 64px; padding: .75rem !important; }
+  .sidebar .brand { padding: 0 0 1.25rem !important; }
+  .sidebar .brand > div:nth-child(2), .sidebar > p, .sidebar .nav-link span, .sidebar > div:last-child { display: none; }
+  .sidebar .nav-link { text-align: center !important; padding: .65rem .4rem; }
+  .main-content { margin-left: 64px; padding: 1rem .75rem !important; }
+  .welcome-banner { min-height: 185px; }
+  .hero-watermark { right: 0; font-size: 9rem; }
+}
+
+
+

@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bs-primary: #214d73;
+  --bs-primary-rgb: 33, 77, 115;
+  --bs-body-font-family: 'DM Sans', Arial, sans-serif;
+  --bs-body-color: #26384b;
+  --bs-body-bg: #f5f7fa;
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-synthesis: none;
+}
+body { min-width: 320px; }
+button { cursor: pointer; }

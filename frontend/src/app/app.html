@@ -1,0 +1,399 @@
+<div class="app-shell d-flex min-vh-100">
+  <aside class="sidebar bg-white border-end d-flex flex-column p-3">
+    <div class="brand d-flex align-items-center gap-2 px-1 pb-4">
+      <div class="brand-icon rounded-3 d-grid place-items-center text-white">✦</div>
+      <div><strong>Comedor organizado</strong><small>Ntra. Sra. de la Merced</small></div>
+    </div>
+    <p class="small text-uppercase fw-semibold text-secondary px-2 mt-2 mb-1">GESTIÓN</p>
+    <button class="nav-link text-start w-100" [class.active]="page() === 'inicio'" (click)="goto('inicio')">
+      ▦ <span>Resumen</span></button
+    ><button class="nav-link text-start w-100" [class.active]="page() === 'inventario'" (click)="goto('inventario')">
+      ▤ <span>Inventario</span></button
+    ><button class="nav-link text-start w-100" [class.active]="page() === 'actividades'" (click)="goto('actividades')">
+      ☷ <span>Actividades</span></button
+    ><button class="nav-link text-start w-100" [class.active]="page() === 'movimientos'" (click)="goto('movimientos')">
+      ↔ <span>Movimientos</span>
+    </button>
+    <div class="mt-auto border-top pt-3 small text-secondary">
+      <span class="d-inline-block rounded-circle bg-success me-2"></span> Prototipo académico<br /><small>Datos de demostración</small>
+    </div>
+  </aside>
+  <main class="main-content flex-grow-1 container-fluid py-4 px-3 px-lg-4">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <span class="eyebrow small text-uppercase fw-semibold text-secondary">COMEDOR PARROQUIAL</span>
+        <h1 class="h3 fw-bold mt-1 mb-0">
+          {{
+            page() === 'inicio'
+              ? 'Resumen'
+              : page() === 'inventario'
+                ? 'Inventario'
+                : page() === 'actividades'
+                  ? 'Actividades'
+                  : 'Movimientos'
+          }}
+        </h1>
+      </div>
+      <button class="btn btn-outline-secondary btn-sm" (click)="resetDemo()">↻ Restablecer demo</button>
+    </header>
+    @if (message()) {
+      <div class="alert alert-success shadow toast-message" role="status">{{ message() }}</div>
+    }
+    @if (page() === 'inicio') {
+      <div class="welcome-banner rounded-4 text-white p-4 p-lg-5 d-flex align-items-center position-relative overflow-hidden">
+        <div>
+          <span class="eyebrow small text-uppercase fw-semibold text-secondary">ORGANIZACIÓN Y SERVICIO</span>
+          <h2>Una gestión más clara,<br />para servir mejor.</h2>
+          <p>Controla los insumos, actividades y movimientos del comedor desde un solo lugar.</p>
+        </div>
+        <div class="hero-watermark position-absolute">✦</div>
+      </div>
+      <div class="row g-3 my-3 stats">
+        <article class="col-12 col-md-4 card border-0 shadow-sm d-flex flex-row align-items-center gap-3">
+          <span class="stat-icon bg-primary-subtle text-primary">▤</span>
+          <div>
+            <small>Insumos registrados</small><strong>{{ items().length }}</strong>
+          </div>
+          <span class="ms-auto small text-secondary">productos</span>
+        </article>
+        <article class="col-12 col-md-4 card border-0 shadow-sm d-flex flex-row align-items-center gap-3">
+          <span class="stat-icon bg-warning-subtle text-warning-emphasis">!</span>
+          <div>
+            <small>Por reponer</small><strong>{{ lowCount }}</strong>
+          </div>
+          <span class="ms-auto small text-secondary">bajo mínimo</span>
+        </article>
+        <article class="col-12 col-md-4 card border-0 shadow-sm d-flex flex-row align-items-center gap-3">
+          <span class="stat-icon bg-success-subtle text-success">↔</span>
+          <div>
+            <small>Movimientos</small><strong>{{ moves().length }}</strong>
+          </div>
+          <span class="ms-auto small text-secondary">registrados</span>
+        </article>
+      </div>
+      <div class="row g-3">
+        <section class="col-12 col-xl-8 card border-0 shadow-sm p-3 p-lg-4">
+          <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h3>Inventario reciente</h3>
+              <p>Estado actual de los insumos</p>
+            </div>
+            <button class="btn btn-link btn-sm text-decoration-none" (click)="goto('inventario')">Ver inventario →</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>INSUMO</th>
+                  <th>CATEGORÍA</th>
+                  <th>DISPONIBLE</th>
+                  <th>ESTADO</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (x of items().slice(0, 5); track x.id) {
+                  <tr>
+                    <td>
+                      <b>{{ x.name }}</b>
+                    </td>
+                    <td>{{ x.category }}</td>
+                    <td>{{ x.stock }} {{ x.unit }}</td>
+                    <td>
+                      <span class="badge rounded-pill" [class.text-bg-warning]="x.stock <= x.minimum" [class.text-bg-success]="x.stock > x.minimum">{{
+                        x.stock <= x.minimum ? 'Reponer' : 'Disponible'
+                      }}</span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="col-12 col-xl-4 card border-0 shadow-sm p-3 p-lg-4 quick">
+          <h3>Accesos rápidos</h3>
+          <p>Registra lo que sucede hoy en el comedor.</p>
+          <button class="btn btn-outline-secondary w-100 d-flex align-items-center text-start my-2 quick-link" (click)="goto('inventario')">
+            <span class="quick-icon rounded-3 bg-primary-subtle text-primary">＋</span>
+            <div><b>Agregar insumo</b><small>Actualizar el inventario</small></div>
+            <i>→</i></button
+          ><button class="btn btn-outline-secondary w-100 d-flex align-items-center text-start my-2 quick-link" (click)="goto('movimientos')">
+            <span class="quick-icon rounded-3 bg-primary-subtle text-primary">↔</span>
+            <div><b>Registrar movimiento</b><small>Entrada o salida de stock</small></div>
+            <i>→</i></button
+          ><button class="btn btn-outline-secondary w-100 d-flex align-items-center text-start my-2 quick-link" (click)="goto('actividades')">
+            <span class="quick-icon rounded-3 bg-primary-subtle text-primary">☷</span>
+            <div><b>Planificar actividad</b><small>Organizar tareas del equipo</small></div>
+            <i>→</i>
+          </button>
+        </section>
+      </div>
+    }
+    @if (page() === 'inventario') {
+      <div class="page-intro d-flex flex-wrap justify-content-between align-items-center gap-3 my-4">
+        <div>
+          <h2 class="h4 fw-semibold mb-1">Control de insumos</h2>
+          <p>Consulta existencias y registra los productos del comedor.</p>
+        </div>
+        <button
+          class="btn btn-primary"
+          (click)="
+            editingItem = 0;
+            itemForm = { name: '', category: 'Abarrotes', unit: 'kg', stock: 0, minimum: 1 }
+          "
+        >
+          ＋ Nuevo insumo
+        </button>
+      </div>
+      <div class="row g-3 inventory-grid">
+        <section class="col-12 col-xl-8 card border-0 shadow-sm p-3 p-lg-4">
+          <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h3 class="h5 fw-semibold mb-0">Productos</h3>
+              <p>{{ items().length }} insumos registrados</p>
+            </div>
+            <input class="form-control form-control-sm search" [(ngModel)]="query" placeholder="⌕  Buscar insumo" />
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>INSUMO</th>
+                  <th>CATEGORÍA</th>
+                  <th>STOCK</th>
+                  <th>MÍNIMO</th>
+                  <th>ESTADO</th>
+                  <th>ACCIONES</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (x of filtered; track x.id) {
+                  <tr>
+                    <td>
+                      <b>{{ x.name }}</b><small class="d-block small text-secondary">{{ x.unit }}</small>
+                    </td>
+                    <td>{{ x.category }}</td>
+                    <td>
+                      <b>{{ x.stock }} {{ x.unit }}</b>
+                    </td>
+                    <td>{{ x.minimum }} {{ x.unit }}</td>
+                    <td>
+                      <span class="badge rounded-pill" [class.text-bg-warning]="x.stock <= x.minimum" [class.text-bg-success]="x.stock > x.minimum">{{
+                        x.stock <= x.minimum ? 'Reponer' : 'Disponible'
+                      }}</span>
+                    </td>
+                    <td class="text-nowrap"><div class="d-flex gap-1">
+                      <button class="btn btn-outline-secondary btn-sm" title="Registrar movimiento" (click)="openMove(x)">↔</button
+                      ><button class="btn btn-outline-secondary btn-sm" title="Editar" (click)="editItem(x)">✎</button
+                      ><button class="btn btn-outline-danger btn-sm" title="Eliminar" (click)="deleteItem(x)">×</button></div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="text-center text-secondary py-4">No hay insumos para mostrar.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="col-12 col-xl-4 card border-0 shadow-sm p-3 p-lg-4 form-panel">
+          <h3>{{ editingItem ? 'Editar insumo' : 'Agregar insumo' }}</h3>
+          <p>Completa la información del producto.</p>
+          <form (ngSubmit)="saveItem()">
+            <label class="form-label small fw-semibold"
+              >Nombre del insumo<input class="form-control form-control-sm"
+                name="name"
+                [(ngModel)]="itemForm.name"
+                required
+                maxlength="60"
+                placeholder="Ej. Arroz" /></label
+            ><label class="form-label small fw-semibold"
+              >Categoría<input class="form-control form-control-sm"
+                name="category"
+                [(ngModel)]="itemForm.category"
+                required
+                placeholder="Abarrotes" /></label
+            ><label class="form-label small fw-semibold"
+              >Unidad<input class="form-control form-control-sm"
+                name="unit"
+                [(ngModel)]="itemForm.unit"
+                required
+                placeholder="kg, litros, unidades"
+            /></label>
+            <div class="row g-2 two">
+              <label class="form-label small fw-semibold"
+                >Stock actual<input class="form-control form-control-sm"
+                  name="stock"
+                  [(ngModel)]="itemForm.stock"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  required /></label
+              ><label class="form-label small fw-semibold"
+                >Stock mínimo<input class="form-control form-control-sm"
+                  name="minimum"
+                  [(ngModel)]="itemForm.minimum"
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  required
+              /></label>
+            </div>
+            <button class="btn btn-primary w-100 mt-2" [disabled]="busy()">Guardar insumo</button>
+          </form>
+          <div class="alert alert-info py-2 small mt-3">ⓘ Recibirás una alerta visual cuando el stock alcance el mínimo.</div>
+        </section>
+      </div>
+    }
+    @if (page() === 'actividades') {
+      <div class="page-intro d-flex flex-wrap justify-content-between align-items-center gap-3 my-4">
+        <div>
+          <h2 class="h4 fw-semibold mb-1">Organización del equipo</h2>
+          <p>Planifica y da seguimiento a las tareas del comedor.</p>
+        </div>
+      </div>
+      <div class="row g-3 activity-grid">
+        <section class="col-12 col-xl-8 card border-0 shadow-sm p-3 p-lg-4">
+          <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h3 class="h5 fw-semibold mb-0">Actividades</h3>
+              <p>{{ activities().length }} tareas en seguimiento</p>
+            </div>
+          </div>
+          @for (a of activities(); track a.id) {
+            <div class="d-flex align-items-center gap-3 border-bottom py-3">
+              <div class="activity-symbol rounded-3 bg-primary-subtle text-primary d-grid place-items-center">☷</div>
+              <div class="flex-grow-1 activity-info">
+                <b>{{ a.name }}</b><small
+                  >{{ a.date || 'Sin fecha' }} · {{ a.owner || 'Sin responsable' }}</small
+                >
+              </div>
+              <span class="badge rounded-pill" [class.text-bg-success]="a.status === 'Completada'" [class.text-bg-warning]="a.status === 'Pendiente'" [class.text-bg-primary]="a.status === 'En curso'">{{ a.status }}</span>
+              <div class="d-flex gap-1">
+                <button class="btn btn-outline-secondary btn-sm" (click)="editActivity(a)">✎</button
+                ><button class="btn btn-outline-danger btn-sm" (click)="deleteActivity(a)">×</button>
+              </div>
+            </div>
+          } @empty {
+            <p class="text-center text-secondary py-4">Aún no hay actividades.</p>
+          }
+        </section>
+        <section class="col-12 col-xl-4 card border-0 shadow-sm p-3 p-lg-4 form-panel">
+          <h3>{{ editingActivity ? 'Editar actividad' : 'Nueva actividad' }}</h3>
+          <p>Asigna una tarea y responsable.</p>
+          <form (ngSubmit)="saveActivity()">
+            <label class="form-label small fw-semibold"
+              >Actividad<input class="form-control form-control-sm"
+                name="name"
+                [(ngModel)]="activityForm.name"
+                required
+                maxlength="80"
+                placeholder="Ej. Preparar menú semanal" /></label
+            ><label class="form-label small fw-semibold">Fecha<input class="form-control form-control-sm" name="date" [(ngModel)]="activityForm.date" type="date" /></label
+            ><label class="form-label small fw-semibold"
+              >Responsable<input class="form-control form-control-sm"
+                name="owner"
+                [(ngModel)]="activityForm.owner"
+                placeholder="Nombre o rol" /></label
+            ><label class="form-label small fw-semibold"
+              >Estado<select class="form-select form-select-sm" name="status" [(ngModel)]="activityForm.status">
+                <option>Pendiente</option>
+                <option>En curso</option>
+                <option>Completada</option>
+              </select></label
+            ><button class="btn btn-primary w-100 mt-2">Guardar actividad</button>
+          </form>
+        </section>
+      </div>
+    }
+    @if (page() === 'movimientos') {
+      <div class="page-intro d-flex flex-wrap justify-content-between align-items-center gap-3 my-4">
+        <div>
+          <h2 class="h4 fw-semibold mb-1">Entradas y salidas</h2>
+          <p>Registra donaciones, compras y uso de los insumos.</p>
+        </div>
+      </div>
+      <div class="row g-3 movement-grid">
+        <section class="col-12 col-xl-4 card border-0 shadow-sm p-3 p-lg-4 form-panel">
+          <h3>Registrar movimiento</h3>
+          <p>El stock se actualizará automáticamente.</p>
+          <form (ngSubmit)="saveMove()">
+            <label class="form-label small fw-semibold"
+              >Insumo<select class="form-select form-select-sm" name="item_id" [(ngModel)]="moveForm.item_id" required>
+                <option [ngValue]="0" disabled>Selecciona insumo</option>
+                @for (x of items(); track x.id) {
+                  <option [ngValue]="x.id">{{ x.name }} — {{ x.stock }} {{ x.unit }}</option>
+                }
+              </select></label
+            ><label class="form-label small fw-semibold"
+              >Tipo de movimiento<select class="form-select form-select-sm" name="kind" [(ngModel)]="moveForm.kind">
+                <option>Entrada</option>
+                <option>Salida</option>
+              </select></label
+            ><label class="form-label small fw-semibold"
+              >Cantidad<input class="form-control form-control-sm"
+                name="quantity"
+                [(ngModel)]="moveForm.quantity"
+                type="number"
+                min="0.1"
+                step="0.1"
+                required /></label
+            ><label class="form-label small fw-semibold"
+              >Motivo<input class="form-control form-control-sm"
+                name="reason"
+                [(ngModel)]="moveForm.reason"
+                maxlength="100"
+                placeholder="Compra, donación, preparación" /></label
+            ><button class="btn btn-primary w-100 mt-2">Registrar movimiento</button>
+          </form>
+        </section>
+        <section class="col-12 col-xl-8 card border-0 shadow-sm p-3 p-lg-4">
+          <div class="d-flex justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h3 class="h5 fw-semibold mb-0">Historial</h3>
+              <p>Movimientos más recientes</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>FECHA</th>
+                  <th>INSUMO</th>
+                  <th>TIPO</th>
+                  <th>CANTIDAD</th>
+                  <th>MOTIVO</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (m of moves(); track m.id) {
+                  <tr>
+                    <td>{{ m.created_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>
+                      <b>{{ m.item_name }}</b>
+                    </td>
+                    <td>
+                      <span class="badge rounded-pill text-bg-success" [class.text-bg-warning]="m.kind === 'Salida'">{{ m.kind }}</span>
+                    </td>
+                    <td>{{ m.quantity }}</td>
+                    <td>{{ m.reason || '—' }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5" class="text-center text-secondary py-4">Aún no hay movimientos registrados.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    }
+    <footer class="d-flex flex-wrap justify-content-between gap-2 border-top mt-4 pt-3 small text-secondary">
+      Comedor Parroquial Nuestra Señora de la Merced
+      <span>Prototipo académico · No usar con datos personales reales</span>
+    </footer>
+  </main>
+</div>
+
+
